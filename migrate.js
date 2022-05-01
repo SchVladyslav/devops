@@ -1,15 +1,23 @@
 const mongoose = require("mongoose");
 
-mongoose.connect(process.env.MONGO_URI || "mongodb://0.0.0.0:27017/app", {
-	useNewUrlParser: true,
-})
+const User = require("./models/user.model");
 
-const User = require("./src/UserModel");
+const start = async () => {
+  try {
+    await mongoose.connect(process.env.DB_URL, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
 
-(async () => {
-	await User.updateMany(
-		{ email: { $exists: false } },
-		{ $set: { email: "migrated@local" } }
-	);
-	mongoose.disconnect();
-})
+    await User.updateMany(
+			{ name: { $exists: false } },
+			{ $set: { name: "migrationName" } }
+		);
+
+		mongoose.disconnect();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+start();
