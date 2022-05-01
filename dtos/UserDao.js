@@ -1,4 +1,4 @@
-const User = require("./UserModel");
+const User = require("../models/UserModel");
 
 // Using a Dao makes life easier when migrating models.
 class UserDao {
