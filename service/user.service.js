@@ -6,7 +6,7 @@ const UserDto = require("../dtos/user.dto");
 const ApiError = require("../exceptions/api-error");
 
 class UserService {
-  async signup(email, password) {
+  async signup(email, password, firstName, lastName) {
     const candidate = await UserModel.findOne({ email });
     if (candidate) {
       throw ApiError.BadRequest(`User with the same email already exist!`);
@@ -14,8 +14,8 @@ class UserService {
     const hashPassword = await bcrypt.hash(password, 3);
     // const activationLink = uuid.v4();
 
-    const user = await UserModel.create({ email, password: hashPassword });
-    const userDto = new UserDto(user); // id, email
+    const user = await UserModel.create({ email, password: hashPassword, firstName, lastName });
+    const userDto = new UserDto(user); // id, email, firstName, lastName
 
     const tokens = tokenService.generateTokens({ ...userDto });
     await tokenService.saveToken(userDto.id, tokens.refresh_token);

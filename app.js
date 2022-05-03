@@ -1,5 +1,5 @@
 const express = require("express");
-const User = require("./UserModel");
+const User = require("./models/user.model");
 const app = express();
 
 app.use(express.json());
@@ -17,7 +17,7 @@ app.get("/api/v1/users", async (req, res) => {
 	res.json(users);
 })
 
-// Adding a property creates a inconsistent model
+// Adding a property creates an inconsistent model
 // We can solve this problem with a migration job
 app.post("/api/v2/users", async (req, res) => {
 	const { name, age, email } = req.body;
@@ -37,7 +37,7 @@ app.post("/api/v3/users", async (req, res) => {
 
 // If we can't stop the system to run a migration job a slower migration strategy is needed.
 // The following code is an example of migrating each user as they use the system
-app.get("/api/v3/users/:id", async (req, res) => {
+app.get("/v3/users/:id", (req, res) => {
 	const user = await User.findById(req.params.id);
 
 	if (user.name) {

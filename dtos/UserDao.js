@@ -1,8 +1,8 @@
-const User = require("../models/UserModel");
+const User = require("../models/user.model");
 
 // Using a Dao makes life easier when migrating models.
 class UserDao {
-	findAll() {
+	async findAll() {
 		return await User.find({});
 	}
 
